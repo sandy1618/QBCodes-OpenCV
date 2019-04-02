@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>B-Codes Generator</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <!--  Android Chrome Color-->
+    <meta name="theme-color" content="#EE6E73">
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="icon" type="image/png" href="http://icons.iconarchive.com/icons/iconsmind/outline/512/QR-Code-icon.png" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <!-- Material Design for Bootstrap CSS-->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <!-- P5.js Processing for image generation.-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/addons/p5.dom.js"></script>
+    <!-- MarvinJ and tensorflow packages for image recognition. -->
+    <script async src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+    <!-- Remember to integrate later with suitable backend. -->
+    <style type="text/css">
+        body {
+            margin: 15px;
+        }
+        img {
+            margin : 15px;
+            top : 10px;
+        }
+        h3 {
+            margin : 10px;
+        }
+        /* display loading gif and hide webpage */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba( 255, 255, 255, .8) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+        }
+
+        /* prevent scrollbar from display during load */
+        body.loading {
+            overflow: hidden;
+        }
+
+            /* display the modal when loading class is added to body */
+            body.loading .modal {
+                display: block;
+            }
+
+        canvas {
+            margin: 15px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var code, cnv, codes = [];
+
+        function setup() {
+            cnv = createCanvas(100, 100);
+            cnv.parent('code_place_holder');
+            noLoop();
+        }
+
+        function draw() {
+            // noStroke();
+            background(250);
+            var field_1 = code_ring(90);
+            var field_2 = code_ring(65);
+            draw_border_lines();
+            textAlign(CENTER);
+            fill(color(255));
+            circle(width / 2, height / 2, 17.5, 50);
+            textSize(20);
+            fill(color(0));
+            text("B", width / 2, height / 2 + 8);
+            line(58, height / 2, 95, height / 2);
+            code = ((value(field_1) * value(field_2)) % (1 << 32 - 2));
+            codes.push(code);
+            codes = codes.sort((a, b) => a - b); // inefficient!!
+            document.getElementById('collision').innerHTML = "Codes generated : " + codes.length + " (Sorted, No Collisions Yet.)" + "<br>";
+            document.getElementById('uniqcode').innerHTML = "Unique Code : " + "<code style='color : blue;'>" + code + "</code>";
+            document.getElementById('uniqcode-1').innerHTML = "Outer Sequence : " + field_1;
+            document.getElementById('uniqcode-2').innerHTML = "Inner Sequence : " + field_2;
+            binary_search(code);
+            show_codes(codes);
+        }
+
+        function show_codes(codes) {
+            var html = "<br>";
+            for (var i = 0; i < codes.length; i++) {
+                html += codes[i] + ", ";
+            }
+            document.getElementById("append-codes").innerHTML = html;
+        }
+
+        /* Needs to be done at backend. Test to see the overhead sorting 2^16 codes. Check for collision using trie method. */
+        function binary_search(codes, code) {
+            let start = 0, end = codes.length - 1;
+            while (start <= end) {
+                let mid = Math.floor(start + (end - start) / 2);
+                if (codes[mid] === code) {
+                    document.getElementById('collision').innerHTML = "Collision Occured. Regenerating Code.";
+                    draw();
+                    break;
+                } else {
+                    ((codes[mid] < code) ? (start = mid + 1) : (end = mid - 1));
+                }
+            }
+        }
+
+        function value(num) {
+            var seq = 0;
+            for (let i = 0; i < num.length; i++) {
+                seq = (((seq << 2) + num[i]) % (1 << 32 - 1));
+            }
+            return seq % (1 << 32 - 1);
+        }
+
+        function image_down() {
+            var name = code + "_code.jpg";
+            save(cnv, name);
+        }
+
+        function getRandomInt(max) {
+            // Handling 32 bits only.
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+
+        function code_ring(diameter) {
+            var num = [], lastAngle = 0;
+            cx = width / 2;
+  			cy = height / 2;
+            for (let i = 0; i < 32; i++) {
+                let gray = getRandomInt(1 << 32 - 2);
+                // let gray = 0;
+                (gray % 2 === 0) ? fill(color(255)) : fill(color(0));
+                stroke(0);
+                arc(cx, cy, diameter, diameter, lastAngle, lastAngle + radians(11.25));
+                lastAngle += radians(11.25);
+                num.push(gray % 2);
+            }
+            return num;
+        }
+
+        function draw_border_lines() {
+        		strokeWeight(1);
+        		stroke(0);
+				var lastAngle = 0;
+            	cx = width / 2;
+  				cy = height / 2;
+        	    for (let i = 0; i < 32; i++) {
+                line(cx, cy, cx + cos(lastAngle) * 45, cy + sin(lastAngle) * 45);
+                lastAngle += radians(11.25);
+            }
+        }
+
+</script>
+</head>
+<body>
+    <h4><code class="text-success" id="uniqcode"></code></h4>
+    <div layout="column">
+        <div class="row">
+            <div id="code_place_holder"></div>
+            <div style="display:inline; margin: 5px; width: 85%; word-break: break-all; word-wrap: break-word;"><h5><code id="collision"></code><code class="text-success" id="append-codes"></code></h5></div>
+        </div>
+        <div layout="row">
+            <h5><code class="text-success" id="uniqcode-1"></code></h5>
+            <h5><code class="text-success" id="uniqcode-2"></code></h5>
+        </div>
+        <br>
+        <button class="btn btn-primary btn-raised btn-success btn-lg" onclick="draw()">Generate New B-Code</button>
+        <button class="btn btn-primary btn-raised btn-lg" onclick="image_down()">Export Image</button>
+        <button class="btn btn-outline-secondary btn-raised btn-lg">Upload Source Image <input type="file" class="custom-file-input" id="fileInput" name="file" /></button>
+        <button class="btn btn-outline-secondary btn-raised btn-lg">Upload Template <input type="file" class="custom-file-input" id="fileInput1" name="file" /></button>
+        <br><br />
+            <div class="row">
+                <div>
+                    <h3><code class="text-success">1.  Source Image  </code></h3>
+                    <img id="imageSrc" onload="image_analyser()" />
+                </div>
+                <div>
+                    <h3><code class="text-success">2. Template Input  </code></h3>
+                    <img id="imageSrc1" />
+                </div>
+                <div>
+                    <h3><code class="text-success">3. Circle Detection  </code></h3>
+                    <canvas id="canvasOutput"></canvas>
+                </div>
+                <div>
+                    <h3><code class="text-success">4. Full Edge Detection   </code></h3>
+                    <canvas id="Output"></canvas>
+                </div>
+            </div>
+        <script type="text/javascript">
+            $(document).ready(function () { $('body').bootstrapMaterialDesign(); });
+
+            document.body.classList.add("loading");
+
+            function onOpenCvReady() {
+                document.body.classList.remove("loading");
+            }
+
+            let imgElement = document.getElementById('imageSrc');
+            let inputElement = document.getElementById('fileInput');
+
+            let imgElement1 = document.getElementById('imageSrc1');
+            let inputElement1 = document.getElementById('fileInput1');
+
+            inputElement.addEventListener('change', (e) => {
+                imgElement.src = URL.createObjectURL(e.target.files[0]);
+            }, false);
+
+            inputElement1.addEventListener('change', (e) => {
+                imgElement1.src = URL.createObjectURL(e.target.files[0]);
+            }, false);
+
+            function image_analyser() {
+                document.body.classList.add("loading");
+
+                let src = cv.imread(imgElement);
+                // let templ = cv.imread(imgElement1);
+                let displayMat = src.clone();
+                let circlesMat = new cv.Mat();
+                let dst = src.clone();
+                // let mask = new cv.Mat();
+                /*
+                for (var i = 0; i < 50; i++) {
+                    cv.matchTemplate(src, templ, dst, cv.TM_CCOEFF, mask);
+                    let result = cv.minMaxLoc(dst, mask);
+                    let maxPoint = result.maxLoc;
+                    if (result.maxVal >= 0.85) {
+                        let color = new cv.Scalar(255, 0, 0, 255);
+                        let point = new cv.Point(maxPoint.x + templ.cols, maxPoint.y + templ.rows);
+                        cv.rectangle(src, maxPoint, point, color);
+                        cv.rectangle(src, maxPoint, point, color, -1);
+                    }
+                    else {
+                        return;
+                    }
+                }
+                */
+                cv.cvtColor(src, src, cv.COLOR_RGB2GRAY, 0);
+                cv.Canny(src, dst, 50, 100, 3, false);
+                cv.HoughCircles(src, circlesMat, cv.HOUGH_GRADIENT, 1, 45, 75, 40, 0, 0);
+                
+                for (let i = 0; i < circlesMat.cols; ++i) {
+                    let x = circlesMat.data32F[i * 3];
+                    let y = circlesMat.data32F[i * 3 + 1];
+                    let radius = circlesMat.data32F[i * 3 + 2];
+
+                    let center = new cv.Point(x, y);
+                    cv.circle(displayMat, center, radius, [0, 0, 0, 255], 3);
+                }
+
+                cv.imshow('Output', circlesMat);
+                cv.imshow('canvasOutput', dst);
+                displayMat.delete();
+                circlesMat.delete();
+                src.delete();
+                dst.delete();
+                // mask.delete();
+
+                this.disabled = false;
+                document.body.classList.remove("loading");
+            };
+        </script>
+        <script async src="https://docs.opencv.org/3.3.1/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+        <div class="modal"></div>
+</body>
+</html>
