@@ -1,2 +1,0 @@
-# QBCodes-OpenCV
-SnapCodes
