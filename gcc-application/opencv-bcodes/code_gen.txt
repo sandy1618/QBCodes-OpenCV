@@ -1,4 +1,4 @@
-.
+(Key, Value) Pairs only.
 
 1971918024, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_1971918024.bmp
 1855813524, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_1855813524.bmp
