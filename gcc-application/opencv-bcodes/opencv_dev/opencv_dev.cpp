@@ -24,7 +24,6 @@ using namespace std;
 
 int main (int argc, char* argv[], char* envp[])
 {
-	s
-	
+
 	return 0;
 }
