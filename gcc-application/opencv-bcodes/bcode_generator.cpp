@@ -171,8 +171,8 @@ int main(int argc, char* argv[], char* envp[])
 	ss << id;
 
 	string image_name = "bcodes_images_" + ss.str();
-	string path_name = "./images/" + image_name + ".jpg";
-	string path = "cloud_store.aws.in/bcodes_images/raw/" + image_name + ".jpg";
+	string path_name = "./images/" + image_name + ".bmp";
+	string path = "https:\/\/cloud_store.aws.in/bcodes_images/raw/" + image_name + ".bmp";
 
 	read_write_codes (id, path);
 

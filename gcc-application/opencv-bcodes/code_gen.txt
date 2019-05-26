@@ -1,16 +1,14 @@
-(key, value) pairs
+.
 
-1291703368, cloud_store.aws.in/bcodes_images/raw/bcodes_images_1291703368.jpg
-1802864764, cloud_store.aws.in/bcodes_images/raw/bcodes_images_1802864764.jpg
-341805948, cloud_store.aws.in/bcodes_images/raw/bcodes_images_341805948.jpg
-1481913622, cloud_store.aws.in/bcodes_images/raw/bcodes_images_1481913622.jpg
-452641589, cloud_store.aws.in/bcodes_images/raw/bcodes_images_452641589.jpg
-1227900076, cloud_store.aws.in/bcodes_images/raw/bcodes_images_1227900076.jpg
-967597440, cloud_store.aws.in/bcodes_images/raw/bcodes_images_967597440.jpg
-659651741, cloud_store.aws.in/bcodes_images/raw/bcodes_images_659651741.jpg
-1599226662, cloud_store.aws.in/bcodes_images/raw/bcodes_images_1599226662.jpg
-1764207280, cloud_store.aws.in/bcodes_images/raw/bcodes_images_1764207280.jpg
-2070765457, cloud_store.aws.in/bcodes_images/raw/bcodes_images_2070765457.jpg
-1985634722, cloud_store.aws.in/bcodes_images/raw/bcodes_images_1985634722.jpg
-399694476, cloud_store.aws.in/bcodes_images/raw/bcodes_images_399694476.jpg
-675123444, cloud_store.aws.in/bcodes_images/raw/bcodes_images_675123444.jpg
+1971918024, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_1971918024.bmp
+1855813524, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_1855813524.bmp
+2047569850, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_2047569850.bmp
+877819939, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_877819939.bmp
+1609048496, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_1609048496.bmp
+559003877, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_559003877.bmp
+247004254, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_247004254.bmp
+1526438324, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_1526438324.bmp
+1867843166, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_1867843166.bmp
+2110271962, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_2110271962.bmp
+909427419, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_909427419.bmp
+2126195160, https://cloud_store.aws.in/bcodes_images/raw/bcodes_images_2126195160.bmp
